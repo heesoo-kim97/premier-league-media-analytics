@@ -50,6 +50,17 @@ youtube = youtube.drop_duplicates(
     subset="videoId"
 )
 
+print("\n--- YouTube Data Check ---")
+print("Channel titles:")
+print(youtube["channelTitle"].value_counts())
+
+print("\nFirst 5 videos:")
+print(
+    youtube[["channelTitle", "videoTitle"]]
+    .head()
+    .to_string(index=False)
+)
+
 print("\n--- Missing Values ---")
 print(youtube.isna().sum()[youtube.isna().sum() > 0])
 

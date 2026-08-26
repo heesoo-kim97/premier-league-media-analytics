@@ -39,4 +39,3 @@ if __name__ == "__main__":
 
     print("Match records:", len(matches))
     print("YouTube records:", len(youtube))
-
