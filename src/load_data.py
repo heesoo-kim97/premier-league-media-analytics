@@ -27,7 +27,10 @@ def load_match_data():
 def load_youtube_data():
     filepath = RAW_DATA / "premier_league_youtube.xlsx"
 
-    return pd.read_excel(filepath)
+    return pd.read_excel(
+        filepath,
+        sheet_name="Premier League"
+    )
 
 
 if __name__ == "__main__":
