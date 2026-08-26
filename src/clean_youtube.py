@@ -46,6 +46,19 @@ for column in numeric_columns:
         errors="coerce"
     )
 
+text_columns = [
+    "channelTitle",
+    "videoTitle",
+    "videoCategoryLabel",
+    "tags"
+]
+
+for column in text_columns:
+    youtube[column] = youtube[column].str.encode(
+        "ascii",
+        errors="ignore"
+    ).str.decode("ascii")
+
 youtube = youtube.drop_duplicates(
     subset="videoId"
 )
