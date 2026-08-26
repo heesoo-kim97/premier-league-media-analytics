@@ -51,3 +51,33 @@ youtube["EngagementRate"] = (
     youtube["Engagement"] /
     youtube["viewCount"]
 )
+
+youtube["EngagementRate"] = youtube["Engagement"].div(
+    youtube["viewCount"].replace(0, pd.NA)
+)
+
+def assign_season(date):
+    if date.month >= 8:
+        return f"{date.year}/{str(date.year + 1)[-2:]}"
+    else:
+        return f"{date.year - 1}/{str(date.year)[-2:]}"
+
+youtube["Season"] = youtube["publishedAt"].apply(assign_season)
+
+matches_output = PROCESSED_DIR / "matches_analytics.csv"
+youtube_output = PROCESSED_DIR / "youtube_analytics.csv"
+
+matches.to_csv(
+    matches_output,
+    index=False
+)
+
+youtube.to_csv(
+    youtube_output,
+    index=False
+)
+
+print("\n--- Analytics Dataset Complete ---")
+print("Match analytics:", matches_output)
+print("YouTube analytics:", youtube_output)
+
