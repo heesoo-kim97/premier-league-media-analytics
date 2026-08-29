@@ -22,7 +22,6 @@
 - [SQL Analysis](#sql-analysis)
 - [Key Findings](#key-findings)
 - [Business Recommendations](#business-recommendations)
-- [Visual Analysis](#visual-analysis)
 
 ---
 
@@ -462,5 +461,102 @@ CREATE TABLE matches (
 
 The full table definition is available in [sql/01_create_tables.sql](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/sql/01_create_tables.sql).
 
+The SQL analysis is organized into separate scripts:
+```
+sql/
+├── 01_create_tables.sql
+├── 02_match_analysis.sql
+└── 03_youtube_analysis.sql
+```
+This keeps database creation, match analysis, and media analysis separated and easy to navigate.
+
 ## SQL Analysis
+
+The database was then used to answer the project's core analytical questions through aggregation, conditional logic, grouping, sorting, and calculated metrics.
+
+### Match Performance
+
+The match analysis examines how match outcomes and scoring changed across the four seasons.
+
+Key questions:
+- How many matches were played each season?
+- How did home wins, draws, and away wins change over time?
+- What was the average number of goals per match each season?
+- Did scoring patterns change across seasons?
+
+Match Results by Season
+```sql
+SELECT 
+    Season,
+    SUM(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS HomeWins,
+    SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS Draws,
+    SUM(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS AwayWins
+FROM matches
+GROUP BY Season
+ORDER BY Season;
+```
+This query uses `CASE` statements with conditional aggregation to count home wins, draws, and away wins within each season.
+
+Average Goals per Match
+```sql
+SELECT 
+    Season,
+    ROUND(AVG(FTHG + FTAG), 2) AS AvgGoalsPerMatch
+FROM matches
+GROUP BY Season
+ORDER BY Season;
+```
+This calculates the average total goals scored per match for each season by combining the home and away goals before applying `AVG()`.
+
+### YouTube Performance
+
+The YouTube analysis evaluates the growth and performance of Premier League-related video content.
+
+Key questions:
+- How many videos were published each year?
+- How did average views change over time?
+- Which videos received the most views?
+- How does performance vary by video category?
+- Does video length relate to average views?
+
+Videos Published and Average Views by Year
+```sql
+SELECT 
+    YEAR(publishedAt) AS Year,
+    COUNT(*) AS TotalVideos,
+    ROUND(AVG(viewCount), 0) AS AvgViews
+FROM youtube_videos
+GROUP BY YEAR(publishedAt)
+ORDER BY Year;
+```
+This query groups videos by publication year to compare content volume and average audience reach over time.
+
+Top 10 Most-Viewed Videos
+```sql
+SELECT 
+    videoTitle,
+    publishedAt,
+    viewCount
+FROM youtube_videos
+ORDER BY viewCount DESC
+LIMIT 10;
+```
+This identifies the highest-performing videos by sorting the dataset by view count and returning the top 10 results.
+
+Video Performance by Length
+```sql
+SELECT
+    CASE
+        WHEN durationSec < 60 THEN 'Under 1 min'
+        WHEN durationSec < 300 THEN '1–5 min'
+        WHEN durationSec < 600 THEN '5–10 min'
+        ELSE '10+ min'
+    END AS VideoLength,
+    COUNT(*) AS TotalVideos,
+    ROUND(AVG(viewCount), 0) AS AvgViews
+FROM youtube_videos
+GROUP BY VideoLength
+ORDER BY AvgViews DESC;
+```
+This uses conditional logic to create video-length groups, allowing average views to be compared across different content lengths.
 
