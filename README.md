@@ -281,3 +281,57 @@ matches = matches[match_columns]
 
 The complete field selection and cleaning is defined in [src/clean_matches.py]().
 
+#### 4. YouTube Data Cleaning
+
+The YouTube dataset was processed separately because its structure and data types differed from the match dataset.
+
+The cleaning process included:
+- Selecting relevant video fields
+- Parsing publication timestamps
+- Converting engagement metrics to numeric values
+- Removing duplicate videos using videoId
+- Standardizing text fields
+- Checking missing values
+- Validating channel and video records
+
+The selected fields capture both video metadata and audience engagement.
+
+<details>
+    <summary>
+        Selected fields:
+    </summary>    
+
+```
+videoId
+channelTitle
+videoTitle
+publishedAt
+videoCategoryLabel
+durationSec
+viewCount
+likeCount
+commentCount
+tags
+```
+</details>
+
+This approach also removes source filds that were not required for the analysis, including the betting-related variables present in the original dataset.
+
+<details>
+    <summary>
+        Python - Selecting analytical match fields:
+    </summary>
+
+    ```python
+    match_columns = [
+    "Season", "Date", "Time",
+    "HomeTeam", "AwayTeam",
+    "FTHG", "FTAG", "FTR",
+    ---
+]
+
+matches = matches[match_columns]
+    ```
+</details>
+
+The complete field selection is defined in [src/clean_matches.py]().
