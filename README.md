@@ -147,73 +147,137 @@ Premier League YouTube video metadata containing information such as:
 
 ## Data Preparation
 
-Python was used to clean, validate, and prepare the datasets before loading them into MySQL.
+Python was used to prepare the Premier League match and YouTube datasets before analysis in MySQL. The workflow was designed to create consistent, validated datasets while keeping the original raw data unchanged.
 
-### Match Data
+The preparation process followed four main stages:
 
-The match datasets were combined and standardized across seasons.
+Load -> Profile -> Clean -> Build Analytics Dataset
 
-Key preparation steps included:
+### Data Preparation Workflow
 
-- Combining season-level CSV files
-- Standardizing column names
-- Parsing match dates
-- Standardizing team names
-- Removing duplicate records
-- Checking missing values
-- Removing betting-related fields
-- Creating consistent season identifiers
-- Validating match result categories
+#### 1. Loading the Raw Data
 
-### Data Quality Checks
+The project uses two primary data sources:
+| Dataset                | Source Format | Coverage        | Purpose                                |
+| ---------------------- | ------------- | --------------- | -------------------------------------- |
+| Premier League Matches | CSV           | 2022/23–2025/26 | Match performance analysis             |
+| Premier League YouTube | Excel         | 2022/23–2025/26 | Media and audience engagement analysis |
 
-The final match dataset contained:
 
-- **1,520 rows**
-- **23 columns**
-- **0 duplicate rows**
-- **0 missing values**
+The four Premier League season files were loaded and combined into a single match dataset. A Season field was added during the loading process so each match could be assoiciated with its respective season.
 
-### Example Python Cleaning Code
+The YouTube dataset was loaded separately from the Excel workbook.
+
+<details>
+    <summary>
+        Python - Loading and combining season data:
+    </summary>
+    
+```Python
+seasons = {
+    "2022/23": "E0_2223.csv",
+    "2023/24": "E0_2324.csv",
+    "2024/25": "E0_2425.csv",
+    "2025/26": "E0_2526.csv"
+}
+
+```  
+</details>
+
+The full loading logic is contained in [src/load_data.py]().
+
+#### 2. Data Profiling
+
+Before cleaning, Python was used to profile both datasets and identify potential data-quality issues.
+
+The profiling process examined:
+- Dataset dimensions
+- Column names
+- Data types
+- Missing values
+- Duplicate records
+- Match counts by season
+- Home and away team distributions
+- YouTube channel distribution
+- Sample records
+
+This allowed the cleaning process to be based on the actual structure and quality of the data rather than assimptions about the source files.
+
+<details>
+    <summary>
+        Python - Profiling missing values and duplicates:
+    </summary>
+    
+```Python
+missing = df.isnull().sum()
+
+print(missing[missing > 0])
+print("Duplicate rows:", df.duplicated().sum())
+
+```  
+</details>
+
+The full profiling logic is contained in [src/profile_data.py]().
+
+#### 3. Match Data Cleaning
+
+The four season-level match files were combined into one consistent dataset.
+
+The cleaning process included:
+- Combining all four seasons
+- Adding a consistent SEASON identifier
+- Selecting only fields required for analysis
+- Parsing match dates into a consistent datetime format
+- Checking for missing values
+- Checking for duplicate records
+- Preserving match-level performance statistics
+
+The final analytical match dataset contains 23 columns, covering match information, scores, results, shots, cards, and corners.
+
+<b>Match Variables</b>
+
+<details>
+    <summary>
+        Selected fields:
+    </summary>    
+
+```
+Season
+Date
+Time
+HomeTeam
+AwayTeam
+FTHG / FTAG
+FTR
+HTHG / HTAG
+HTR
+HS / AS
+HST / AST
+HF / AF
+HC / AC
+HY / AY
+HR / AR
+```  
+</details>
+
+This approach also removes source filds that were not required for the analysis, including the betting-related variables present in the original dataset.
+
+<details>
+    <summary>
+        Python — Selecting analytical match fields:
+    </summary>
 
 ```python
-import pandas as pd
+match_columns = [
+    "Season", "Date", "Time",
+    "HomeTeam", "AwayTeam",
+    "FTHG", "FTAG", "FTR",
+    ...
+]
 
-# Load season files
-df_22 = pd.read_csv("../data/raw/premier_league_2022_23.csv")
-df_23 = pd.read_csv("../data/raw/premier_league_2023_24.csv")
-df_24 = pd.read_csv("../data/raw/premier_league_2024_25.csv")
-df_25 = pd.read_csv("../data/raw/premier_league_2025_26.csv")
+matches = matches[match_columns]
+```
+</details>
 
-# Add season identifier
-df_22["Season"] = "2022/23"
-df_23["Season"] = "2023/24"
-df_24["Season"] = "2024/25"
-df_25["Season"] = "2025/26"
+The complete field selection and cleaning is defined in [src/clean_matches.py]().
 
-# Combine datasets
-matches = pd.concat(
-    [df_22, df_23, df_24, df_25],
-    ignore_index=True
-)
-
-# Parse dates
-matches["Date"] = pd.to_datetime(
-    matches["Date"],
-    dayfirst=True
-)
-
-# Remove duplicate rows
-matches = matches.drop_duplicates()
-
-# Check missing values
-print(matches.isnull().sum())
-
-# Check number of records
-print(matches.shape)
-
-# Save cleaned dataset
-matches.to_csv(
-    "../data/processed/premier_league_matches_clean.csv",
-    index=False
-)
