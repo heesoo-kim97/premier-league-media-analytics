@@ -411,3 +411,56 @@ Because the match and YouTube datasets came from different sources, a common `Se
 This creates a shared `Season` dimension that allows match performance and digital engagement to be compared in the SQL analysis.
 
 The complete analytical engineering logic can be seen in [src/build_analytics.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/build_analytics.py).
+
+## Database Structure
+
+The project uses a MySQL database to organize Premier League
+match performance and YouTube media data.
+
+The database contains two primary tables:
+
+- `matches` — match-level performance data across four Premier League seasons
+- `youtube_videos` — video metadata and engagement metrics
+
+### Entity Relationship Diagram
+
+<img width="680" height="435" alt="Screenshot 2026-08-29 at 2 00 05 PM" src="https://github.com/user-attachments/assets/e5abfb6e-fab4-4341-ad40-b473b8e6d367" />
+
+
+### Table Overview
+
+| Table | Purpose | Key Data | Records |
+|---|---|---|---|
+| `matches` | Premier League match performance | Scores, results, shots, cards, corners | 1,520 |
+| `youtube_videos` | YouTube video and engagement data | Views, likes, comments, duration, category | 4,535 |
+
+### SQL - Creating the Database
+
+<details>
+    <summary>
+        <b>View SQL - DB and table creation:</b>
+    </summary>
+
+```python
+CREATE DATABASE IF NOT EXISTS premier_league_media;
+
+USE premier_league_media;
+
+CREATE TABLE matches (
+    Season VARCHAR(10),
+    Date DATE,
+    Time TIME,
+    HomeTeam VARCHAR(50),
+    AwayTeam VARCHAR(50),
+    FTHG INT,
+    FTAG INT,
+    FTR VARCHAR(1),
+    ...
+);
+```
+</details>
+
+The full table definition is available in [sql/01_create_tables.sql](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/sql/01_create_tables.sql).
+
+## SQL Analysis
+
