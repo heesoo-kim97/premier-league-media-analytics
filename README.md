@@ -20,13 +20,9 @@
 - [Data Preparation](#data-preparation)
 - [Database Structure](#database-structure)
 - [SQL Analysis](#sql-analysis)
-- [Python Analysis](#python-analysis)
 - [Key Findings](#key-findings)
 - [Business Recommendations](#business-recommendations)
 - [Visual Analysis](#visual-analysis)
-- [Project Structure](#project-structure)
-- [How to Reproduce](#how-to-reproduce)
-- [Skills Demonstrated](#skills-demonstrated)
 
 ---
 
@@ -170,7 +166,7 @@ The YouTube dataset was loaded separately from the Excel workbook.
 
 <details>
     <summary>
-        Python - Loading and combining season data:
+        <b>Python - Loading and combining season data:</b>
     </summary>
     
 ```Python
@@ -205,7 +201,7 @@ This allowed the cleaning process to be based on the actual structure and qualit
 
 <details>
     <summary>
-        Python - Profiling missing values and duplicates:
+        <b>Python - Profiling missing values and duplicates:</b>
     </summary>
     
 ```Python
@@ -238,7 +234,7 @@ The final analytical match dataset contains 23 columns, covering match informati
 
 <details>
     <summary>
-        Selected fields:
+        <b>Selected fields:</b>
     </summary>    
 
 ```
@@ -264,7 +260,7 @@ This approach also removes source filds that were not required for the analysis,
 
 <details>
     <summary>
-        Python — Selecting analytical match fields:
+        <b>Python — Selecting analytical match fields:</b>
     </summary>
 
 ```python
@@ -298,7 +294,7 @@ The selected fields capture both video metadata and audience engagement.
 
 <details>
     <summary>
-        Selected fields:
+        <b>Selected fields:</b>
     </summary>    
 
 ```
@@ -319,34 +315,97 @@ This approach also removes source filds that were not required for the analysis,
 
 <details>
     <summary>
-        Python - Selecting analytical match fields:
+        <b>Python - Selecting analytical match fields:</b>
     </summary>
 
-    ```python
+```python
     match_columns = [
     "Season", "Date", "Time",
     "HomeTeam", "AwayTeam",
     "FTHG", "FTAG", "FTR",
     ---
-]
+    ]
 
-matches = matches[match_columns]
-    ```
+    matches = matches[match_columns]
+```
 </details>
 
 The complete field selection is defined in [src/clean_matches.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/clean_matches.py).
 
-#### 5. Data Standardization
+#### 5. Analytical Feature Engineering
 
-Match dates were converted into a consistent datetime format so they could be relianily used for analysis and later joined with the YouTube dataset.
+After cleaning, Python was used to create analysis-ready metrics and align the match and YouTube datasets by Premier League season.
+
+Match Performance Metrics
+| Feature              | Calculation             | Purpose                       |
+| -------------------- | ----------------------- | ----------------------------- |
+| `TotalGoals`         | Home Goals + Away Goals | Measure total scoring         |
+| `TotalShots`         | Home Shots + Away Shots | Measure attacking activity    |
+| `TotalShotsOnTarget` | Home SOT + Away SOT     | Measure shot quality          |
+| `HighScoringMatch`   | Total Goals ≥ 4         | Identify high-scoring matches |
+
+<details>
+    <summary><b>Python - Creating match metrics:</b></summary>
 
 ```python
-matches["Date"] = pd.to_datetime(matches["Date"])
-
-youtube["publishedAt"] = pd.to_datetime(
-    youtube["publishedAt"]
+matches["TotalGoals"] = (
+    matches["FTHG"] + matches["FTAG"]
 )
 
-youtube["Date"] = youtube["publishedAt"].dt.date
-matches["Date"] = matches["Date"].dt.date
+matches["TotalShots"] = (
+    matches["HS"] + matches["AS"]
+)
+
+matches["TotalShotsOnTarget"] = (
+    matches["HST"] + matches["AST"]
+)
+
+matches["HighScoringMatch"] = (
+    matches["TotalGoals"] >= 4
+)
 ```
+</details>
+
+<b>YouTube Engagement Metrics</b>
+
+YouTube data was extended with engagement metrics to measure how audiences interacted with Premier League content
+| Feature          | Calculation        |
+| ---------------- | ------------------ |
+| `Engagement`     | Likes + Comments   |
+| `EngagementRate` | Engagement ÷ Views |
+
+<details>
+    <summary><b>Python - Creating engagement metrics:</b></summary>
+
+```python
+youtube["Engagement"] = (
+    youtube["likeCount"] +
+    youtube["commentCount"]
+)
+
+youtube["EngagementRate"] = (
+    youtube["Engagement"] /
+    youtube["viewCount"]
+)
+```
+</details>
+
+<b>Season Alignment</b>
+
+Because the match and YouTube datasets came from different sources, a common `Season` field was created for the YouTube data based on publication date.
+
+<details>
+    <summary><b>Python-Assigning YouTube seasons:</b>></summary>
+    
+```python
+    def assign_season(date):
+    if date.month >= 8:
+        return f"{date.year}/{str(date.year + 1)[-2:]}"
+    else:
+        return f"{date.year - 1}/{str(date.year)[-2:]}"
+```
+</details>
+
+This creates a shared `Season` dimension that allows match performance and digital engaement to be compared in the SQL analysis.
+
+The complete analytical engineering logic can be seen in [src/build_analytics.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/build_analytics.py).
