@@ -107,6 +107,8 @@ By combining match and digital media data, analysts can identify trends that may
 
 ### Premier League Match Data
 
+The data was retrieved from [Football-Data.co](https://www.football-data.co.uk/englandm.php).
+
 Match-level Premier League data covering the:
 
 - 2022/23 season
@@ -128,12 +130,18 @@ Betting-related fields were excluded from the analysis because they were outside
 
 ### YouTube Data
 
+The data was retrieved from [Zenodo](https://zenodo.org/records/20719982).
+
 Premier League YouTube video metadata containing information such as:
 
 - Video title
 - Publication date
 - View count
-- [INSERT OTHER AVAILABLE FIELDS]
+- Video ID
+- Video length
+- Video description
+- Video tag
+- Video category
 
 ---
 
