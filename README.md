@@ -166,7 +166,7 @@ The YouTube dataset was loaded separately from the Excel workbook.
 
 <details>
     <summary>
-        <b>Python - Loading and combining season data:</b>
+        <b>View Python - Loading and combining season data:</b>
     </summary>
     
 ```Python
@@ -203,7 +203,7 @@ This allowed the cleaning process to be based on the actual structure and qualit
 
 <details>
     <summary>
-        <b>Python - Profiling missing values and duplicates:</b>
+        <b>View Python - Profiling missing values and duplicates:</b>
     </summary>
     
 ```Python
@@ -236,7 +236,7 @@ The final analytical match dataset contains 23 columns, covering match informati
 
 <details>
     <summary>
-        <b>Selected fields:</b>
+        <b>View Selected fields:</b>
     </summary>    
 
 ```
@@ -262,7 +262,7 @@ This approach also removes source fields that were not required for the analysis
 
 <details>
     <summary>
-        <b>Python - Selecting analytical match fields:</b>
+        <b>View Python - Selecting analytical match fields:</b>
     </summary>
 
 ```python
@@ -296,7 +296,7 @@ The selected fields capture both video metadata and audience engagement.
 
 <details>
     <summary>
-        <b>Selected fields:</b>
+        <b>View Selected fields:</b>
     </summary>    
 
 ```
@@ -317,7 +317,7 @@ This approach also removes source fields that were not required for the analysis
 
 <details>
     <summary>
-        <b>Python - Selecting analytical match fields:</b>
+        <b>View Python - Selecting analytical match fields:</b>
     </summary>
 
 ```python
@@ -347,7 +347,7 @@ Match Performance Metrics
 | `HighScoringMatch`   | Total Goals ≥ 4         | Identify high-scoring matches |
 
 <details>
-    <summary><b>Python - Creating match metrics:</b></summary>
+    <summary><b>View Python - Creating match metrics:</b></summary>
 
 ```python
 matches["TotalGoals"] = (
@@ -377,7 +377,7 @@ YouTube data was extended with engagement metrics to measure how audiences inter
 | `EngagementRate` | Engagement ÷ Views |
 
 <details>
-    <summary><b>Python - Creating engagement metrics:</b></summary>
+    <summary><b>View Python - Creating engagement metrics:</b></summary>
 
 ```python
 youtube["Engagement"] = (
@@ -397,7 +397,7 @@ youtube["EngagementRate"] = (
 Because the match and YouTube datasets came from different sources, a common `Season` field was created for the YouTube data based on publication date.
 
 <details>
-    <summary><b>Python - Assigning YouTube seasons:</b></summary>
+    <summary><b>View Python - Assigning YouTube seasons:</b></summary>
     
 ```python
     def assign_season(date):
