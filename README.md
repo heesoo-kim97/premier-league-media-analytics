@@ -184,7 +184,7 @@ seasons = {
 ```  
 </details>
 
-The full loading logic is contained in [src/load_data.py]().
+The full loading logic is contained in [src/load_data.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/load_data.py).
 
 #### 2. Data Profiling
 
@@ -217,7 +217,7 @@ print("Duplicate rows:", df.duplicated().sum())
 ```  
 </details>
 
-The full profiling logic is contained in [src/profile_data.py]().
+The full profiling logic is contained in [src/profile_data.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/profile_data.py).
 
 #### 3. Match Data Cleaning
 
@@ -279,7 +279,7 @@ matches = matches[match_columns]
 ```
 </details>
 
-The complete field selection and cleaning is defined in [src/clean_matches.py]().
+The complete field selection and cleaning is defined in [src/clean_matches.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/clean_matches.py).
 
 #### 4. YouTube Data Cleaning
 
@@ -334,4 +334,19 @@ matches = matches[match_columns]
     ```
 </details>
 
-The complete field selection is defined in [src/clean_matches.py]().
+The complete field selection is defined in [src/clean_matches.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/clean_matches.py).
+
+#### 5. Data Standardization
+
+Match dates were converted into a consistent datetime format so they could be relianily used for analysis and later joined with the YouTube dataset.
+
+```python
+matches["Date"] = pd.to_datetime(matches["Date"])
+
+youtube["publishedAt"] = pd.to_datetime(
+    youtube["publishedAt"]
+)
+
+youtube["Date"] = youtube["publishedAt"].dt.date
+matches["Date"] = matches["Date"].dt.date
+```
