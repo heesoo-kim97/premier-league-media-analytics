@@ -170,12 +170,14 @@ The YouTube dataset was loaded separately from the Excel workbook.
     </summary>
     
 ```Python
-seasons = {
-    "2022/23": "E0_2223.csv",
-    "2023/24": "E0_2324.csv",
-    "2024/25": "E0_2425.csv",
-    "2025/26": "E0_2526.csv"
-}
+def load_match_data():
+    seasons = {
+        "2022/23": "E0_2223.csv",
+        "2023/24": "E0_2324.csv",
+        "2024/25": "E0_2425.csv",
+        "2025/26": "E0_2526.csv"
+    }
+    ...
 
 ```  
 </details>
@@ -256,11 +258,11 @@ HR / AR
 ```  
 </details>
 
-This approach also removes source filds that were not required for the analysis, including the betting-related variables present in the original dataset.
+This approach also removes source fields that were not required for the analysis, including the betting-related variables present in the original dataset.
 
 <details>
     <summary>
-        <b>Python — Selecting analytical match fields:</b>
+        <b>Python - Selecting analytical match fields:</b>
     </summary>
 
 ```python
@@ -311,7 +313,7 @@ tags
 ```
 </details>
 
-This approach also removes source filds that were not required for the analysis, including the betting-related variables present in the original dataset.
+This approach also removes source fields that were not required for the analysis, including the betting-related variables present in the original dataset.
 
 <details>
     <summary>
@@ -323,14 +325,14 @@ This approach also removes source filds that were not required for the analysis,
     "Season", "Date", "Time",
     "HomeTeam", "AwayTeam",
     "FTHG", "FTAG", "FTR",
-    ---
+    ...
     ]
 
     matches = matches[match_columns]
 ```
 </details>
 
-The complete field selection is defined in [src/clean_matches.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/clean_matches.py).
+The complete field selection is defined in [src/clean_youtube.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/clean_youtube.py).
 
 #### 5. Analytical Feature Engineering
 
@@ -395,7 +397,7 @@ youtube["EngagementRate"] = (
 Because the match and YouTube datasets came from different sources, a common `Season` field was created for the YouTube data based on publication date.
 
 <details>
-    <summary><b>Python-Assigning YouTube seasons:</b>></summary>
+    <summary><b>Python - Assigning YouTube seasons:</b></summary>
     
 ```python
     def assign_season(date):
@@ -406,6 +408,6 @@ Because the match and YouTube datasets came from different sources, a common `Se
 ```
 </details>
 
-This creates a shared `Season` dimension that allows match performance and digital engaement to be compared in the SQL analysis.
+This creates a shared `Season` dimension that allows match performance and digital engagement to be compared in the SQL analysis.
 
 The complete analytical engineering logic can be seen in [src/build_analytics.py](https://github.com/heesoo-kim97/premier-league-media-analytics/blob/main/src/build_analytics.py).
