@@ -560,3 +560,103 @@ ORDER BY AvgViews DESC;
 ```
 This uses conditional logic to create video-length groups, allowing average views to be compared across different content lengths.
 
+## Key Findings
+The analysis revealed several notable patterns across Premier League match performance and YouTube media activity.
+
+### Match Performance
+Scoring peaked in 2023/24 before declining in subsequent seasons.
+
+Average Goals per Match:
+<img width="850" height="500" alt="Screenshot 2026-08-29 at 10 47 45 PM" src="https://github.com/user-attachments/assets/7f2b1128-f8f3-47f7-9862-560fe0c6b0a5" />
+
+Average goals per match increased from 2.85 in 2022/23 to 3.28 in 2023/24, before declining to 2.93 in 2024/25 and 2.75 in 2025/26. This suggests that the 2023/24 season represented a particularly high-scoring period, while scoring levels moderated in the following seasons.
+
+Home teams consistently accounted for the largest share of wins. The distribution of home wins, draws, and away wins changed from season to season, suggesting that outcome trends should be monitored over time rather than assuming a fixed distribution.
+
+### YouTube Performance
+Premier League video publishing increased substantially over the period analyzed.
+
+<img width="850" height="500" alt="Screenshot 2026-08-29 at 11 06 17 PM" src="https://github.com/user-attachments/assets/c1621c2c-ae4a-4aff-a27b-f31100d6bfa8" />
+
+Annual publishing volume increased significantly, reaching a peak of 1,228 videos in the highest-volume year shown in the anaysis. This indicates a substantial expansion in the amount of Premier League-related content being published.
+
+Audience reach was substantial across the dataset. The average view was about 1.45 million views per video, demonstrating strong potential audience reach for Premier League digital content.
+
+The SQL analysis compared average views across video categories and video-length groups, providing a basis for idnetifying which types of content are assoicated with stronger audience performance.
+
+## Business Recommendations
+
+Based on these findings, several opportunities emerge for a Premier League media strategy.
+
+### 1. Prioritize Content Around High-Interest Match Periods</b>
+
+Use match-performance trends to identify periods that are likely to generate stronger fan interest.
+
+For example, high-scoring matches can provide opportunities for:
+
+- Match highlights
+- Goal compilations
+- Post-match analysis
+- Player-focused content
+- Short-form social clips
+
+<b>Business value</b>: Connect on-field events with timely content while audience interest is highest.
+
+### 2. Use Historical Performance to Guide Content Planning
+
+Rather than publishing content at a consistent volume regardless of the season, media teams could use historical match and engagement data to identify periods with greater audience potential.
+
+Content calendars could incorporate:
+
+- High-profile fixtures
+- High-scoring matches
+- Competitive stretches of the season
+- Major player storylines
+- End-of-season events
+
+<b>Business value</b>: Allocate content resources toward events with the greatest potential audience engagement.
+
+### 3. Identify High-Performing Content Formats
+
+The YouTube analysis compares video categories and video-length groups based on average views.
+
+These comparisons can be used to identify content formats that consistently attract larger audiences.
+
+A media team could then:
+
+- Identify high-performing categories.
+- Compare their average views with lower-performing categories.
+- Evaluate whether video length is associated with stronger performance.
+- Test additional content within successful formats.
+
+<b>Business value</b>: Use audience data to inform content strategy rather than relying solely on assumptions about what fans want.
+
+### 4. Connect Match Performance With Digital Engagement
+
+The two datasets provide complementary perspectives:
+
+```
+Match Performance
+       ↓
+Goals • Results • Match Activity
+       ↓
+Potential Fan Interest
+       ↓
+YouTube Content
+       ↓
+Views • Engagement • Content Performance
+```
+
+A future analysis could combine match-level events with digital performance to determine whether characteristics such as high-scoring matches, specific teams, or major fixtures are associated with increased YouTube views.
+
+<b>Business value</b>: Better understand how on-field events translate into digital audience behavior.
+
+### Conclusion
+
+This project demonstrates how Python and SQL can be used together to transform raw sports and media data into actionable business insights.
+
+The analysis connects two sides of Premier League performance:
+- On-field performance - match results, goals, and seasonal trends
+- Digital performance - publishing volume, views, content categories, and video characterisitics
+
+The findings provide a foundation for a more advanced media strategy focused on timing, content selection, and audience engagement.
