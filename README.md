@@ -45,9 +45,9 @@ The goal is to understand how football performance and digital content activity 
 |---|---|
 | Premier League Matches | 2022/23–2025/26 |
 | Matches Analyzed | 1,520 |
-| YouTube Data | [INSERT DATE RANGE] |
+| YouTube Data | 2019-2025 |
 | Primary Tools | Python, SQL, MySQL |
-| Visualization | [INSERT LATER] |
+| Visualization | Tableau |
 
 ---
 
